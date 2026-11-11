@@ -7,7 +7,7 @@
 | --- | --- |
 | 公開 URL | https://corporate.straid-nfc-companion.workers.dev |
 | 原稿の置き場所（GitHub） | https://github.com/shotake0222/corporate |
-| 公開サーバー（Cloudflare） | Workers & Pages の `corporate` |
+| 公開サーバー（Cloudflare） | https://dash.cloudflare.com →「Workers & Pages」→ `corporate`（ビルド履歴の確認はここ） |
 
 ---
 
