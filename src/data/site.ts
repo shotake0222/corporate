@@ -75,7 +75,12 @@ export const company: { label: string; value: string; href?: string }[] = [
   { label: '代表者', value: '代表社員　武林 勝太郎' },
   { label: '所在地', value: '' },
   { label: '資本金', value: '' },
-  { label: '事業内容', value: '' },
+  {
+    label: '事業内容',
+    // TODO: 仮の内容（ダミー）。設立完了後、定款の事業目的に合わせて修正する
+    value:
+      '1. 事業戦略・新規事業の立案および実行支援\n2. XR／AR 技術を活用したサービスの企画・開発・運営\n3. Web サービス・アプリケーションの企画・開発・運営\n4. 写真・映像の撮影および制作\n5. イベントの企画・運営\n6. 前各号に附帯関連する一切の事業',
+  },
   { label: '法人番号', value: '' },
   { label: '適格請求書発行事業者登録番号', value: '' },
   { label: '取引銀行', value: '' },
