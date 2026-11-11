@@ -16,7 +16,7 @@ export const services: ServiceItem[] = [
   { name: 'Value-Pathfinder', logo: 'value-pathfinder.png', url: 'https://lp.value-pathfinder.online/' },
   { name: 'コトヅテ', logo: 'kotozute.webp', url: 'https://koto-zute.com/lp' },
   { name: 'Pagescope', logo: 'pagescope.webp', url: 'https://pagescope.online/' },
-  { name: 'Areapulse', logo: 'areapulse.jpg', url: 'https://areapulse.jo/' },
+  { name: 'Areapulse', logo: 'areapulse.jpg', url: 'https://areapulse.jp/' },
   { name: 'SNAP CARD', logo: 'snap-card.webp', url: 'https://snap-card.org//' },
   { name: 'ぺたる', logo: 'petaru.webp', url: 'https://app.petaruo.com/lp' },
   { name: 'わけたま', logo: 'waketama.png', url: 'https://waketama.com/lp' },
