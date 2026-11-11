@@ -178,8 +178,11 @@ npm run dev
    | デプロイコマンド | `npx wrangler deploy` |
    | ルートディレクトリ | `/`（そのまま） |
 
-4. 「変数とシークレット」（ビルド用）に `SITE_URL` を追加し、公開 URL を設定する（例：`https://example.co.jp`）
-5. 保存してデプロイ。以降は `main` に push するたびに自動で公開されます
+4. プロジェクト名は `corporate` にする（`wrangler.jsonc` の `name` と一致させる）
+5. 「変数とシークレット」（ビルド用）に `SITE_URL` を追加し、公開 URL を設定する（例：`https://example.co.jp`）
+6. 保存してデプロイ。以降は `main` に push するたびに自動で公開されます
+
+> 現在の設定：Worker 名 `corporate` ／ 公開 URL `https://corporate.straid-nfc-companion.workers.dev` ／ `main` への push で自動デプロイ（設定済み）
 
 Node.js のバージョンは `.nvmrc` / `.node-version` で指定しています。
 
@@ -192,7 +195,7 @@ Cloudflare の該当 Worker →「設定」→「ドメインとルート」→�
 
 ## 公開前に確認すること
 
-- [ ] `SITE_URL`（公開 URL）を設定した
+- [ ] 独自ドメインを付けたら、ビルド変数 `SITE_URL` をそのドメインに変更した
 - [ ] 会社概要の「準備中」の項目（`src/data/site.ts`）
 - [ ] 代表メッセージ、メインビューの文言、ミッション・ビジョン（たたき台です）
 - [ ] 個人情報保護方針・サイトポリシーの内容と制定日（ひな形です。必要に応じて専門家の確認を受けてください）

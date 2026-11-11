@@ -1,7 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // Cloudflare Workers（静的アセット配信のみ・サーバー処理なし）
-  "name": "in-ones-corporate",
+  // name は Cloudflare ダッシュボード上の Worker 名と一致させる（不一致だとビルドが失敗する）
+  "name": "corporate",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./dist",
