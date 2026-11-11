@@ -1,0 +1,11 @@
+---
+import Page from '../../layouts/Page.astro';
+import NewsList from '../../components/NewsList.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import { getPosts } from '../../lib/posts';
+const posts = await getPosts('news');
+---
+<Page en="News" ja="ニュース" description="合同会社in One'sからのお知らせ・プレスリリースの一覧です。">
+  <NewsList posts={posts} />
+  <ContactCta slot="after" />
+</Page>

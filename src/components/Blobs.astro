@@ -1,0 +1,5 @@
+---
+// 水彩のにじみ（ロゴのモチーフ）を表現する、ゆっくり動くぼかし図形
+const { count = 2 } = Astro.props;
+---
+{Array.from({ length: count }, (_, i) => <span class={`blob blob--${i + 1}`} aria-hidden="true" />)}

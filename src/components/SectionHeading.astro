@@ -1,0 +1,13 @@
+---
+interface Props {
+  en: string;
+  ja: string;
+  light?: boolean;
+  as?: 'h1' | 'h2';
+}
+const { en, ja, light = false, as: Tag = 'h2' } = Astro.props;
+---
+<div class:list={['sec-head', { 'sec-head--light': light }]}>
+  <p class="sec-head__en reveal" aria-hidden="true">{en}</p>
+  <Tag class="sec-head__ja reveal" style="--i:1">{ja}</Tag>
+</div>

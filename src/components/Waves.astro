@@ -1,0 +1,12 @@
+---
+// 画面下端の波。最前面の波は次のセクションの背景色で塗り、なめらかにつなぐ。
+const { fill = '#ffffff' } = Astro.props;
+const wave = 'M0 100 C240 20 480 20 720 100 S1200 180 1440 100 S1920 20 2160 100 S2640 180 2880 100 V220 H0Z';
+const wave2 = 'M0 120 C200 180 520 60 720 120 S1240 60 1440 120 S1960 60 2160 120 S2680 60 2880 120 V220 H0Z';
+const wave3 = 'M0 150 C260 110 460 190 720 150 S1180 190 1440 150 S1900 190 2160 150 S2620 190 2880 150 V220 H0Z';
+---
+<svg class="hero__waves" viewBox="0 0 2880 220" preserveAspectRatio="none" aria-hidden="true">
+  <path d={wave} fill="#ffffff" fill-opacity="0.10" />
+  <path d={wave2} fill="#ffffff" fill-opacity="0.16" />
+  <path d={wave3} fill={fill} />
+</svg>

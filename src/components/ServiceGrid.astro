@@ -1,0 +1,21 @@
+---
+import { services } from '../data/services';
+import ExternalIcon from './ExternalIcon.astro';
+---
+<ul class="service-grid">
+  {
+    services.map((item, i) => (
+      <li class="reveal" style={`--i:${i % 6}`}>
+        <a class="service-card" href={item.url} target="_blank" rel="noopener noreferrer">
+          <span class="service-card__logo">
+            <img src={`/images/service/${item.logo}`} alt="" loading="lazy" decoding="async" />
+          </span>
+          <span class="service-card__name">
+            {item.name}
+            <ExternalIcon />
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

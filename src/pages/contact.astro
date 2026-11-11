@@ -1,0 +1,119 @@
+---
+import Page from '../layouts/Page.astro';
+import Arrow from '../components/Arrow.astro';
+import { site } from '../data/site';
+
+interface Field {
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'tel';
+  required: boolean;
+  placeholder: string;
+  autocomplete?: string;
+  wide?: boolean;
+}
+
+// name がそのまま通知メールの項目名になります
+const fields: Field[] = [
+  { name: '法人名', label: '法人名', type: 'text', required: false, placeholder: '会社名を入力してください', autocomplete: 'organization' },
+  { name: '部署名', label: '部署名', type: 'text', required: false, placeholder: '部署名を入力してください', autocomplete: 'organization-title' },
+  { name: 'ご住所', label: 'ご住所', type: 'text', required: false, placeholder: 'ご住所を入力してください', autocomplete: 'street-address', wide: true },
+  { name: 'お名前', label: 'お名前', type: 'text', required: true, placeholder: '名前を入力してください', autocomplete: 'name' },
+  { name: 'フリガナ', label: 'フリガナ', type: 'text', required: true, placeholder: 'フリガナを入力してください' },
+  { name: 'email', label: 'メールアドレス', type: 'email', required: true, placeholder: 'メールアドレスを入力してください', autocomplete: 'email' },
+  { name: '電話番号', label: '電話番号', type: 'tel', required: true, placeholder: '電話番号を入力してください', autocomplete: 'tel' },
+];
+---
+
+<Page en="Contact" ja="お問い合わせ" description="合同会社in One'sへのお問い合わせはこちらのフォームからお願いします。" narrow>
+  <div data-contact>
+    <p class="lead-text reveal">
+      お問い合わせは下記のフォームよりお願いします。<br />内容を確認のうえ、担当者よりご連絡いたします。
+    </p>
+
+    <form class="form reveal" action={site.contactEndpoint} method="POST" accept-charset="UTF-8" data-contact-form>
+      <input type="hidden" name="_subject" value={`【${site.shortName}】Webサイトからのお問い合わせ`} />
+      <p class="form__hp" aria-hidden="true">
+        <label>この欄は入力しないでください <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+      </p>
+
+      <div class="form__grid">
+        {
+          fields.map((f) => (
+            <div class="field" style={f.wide ? 'grid-column: 1 / -1' : undefined}>
+              <label for={`f-${f.name}`}>
+                {f.label}
+                <span class:list={['badge', f.required ? 'badge--req' : 'badge--opt']}>{f.required ? '必須' : '任意'}</span>
+              </label>
+              <input class="input" id={`f-${f.name}`} name={f.name} type={f.type} placeholder={f.placeholder} required={f.required} autocomplete={f.autocomplete as astroHTML.JSX.InputHTMLAttributes['autocomplete']} />
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="field">
+        <label for="f-message">お問い合わせ内容 <span class="badge badge--req">必須</span></label>
+        <textarea class="input" id="f-message" name="お問い合わせ内容" placeholder="お問い合わせ内容を入力してください" required></textarea>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" name="個人情報の取扱いへの同意" value="同意する" required />
+        <span><a href="/privacy/" target="_blank" rel="noopener">個人情報保護方針</a>に同意のうえ送信します</span>
+      </label>
+
+      <div class="form__submit">
+        <button class="btn" type="submit" data-submit><span data-submit-label>送信する</span> <Arrow /></button>
+        <p class="form__status" role="status" aria-live="polite" data-status></p>
+      </div>
+    </form>
+
+    <div class="thanks" hidden data-thanks tabindex="-1">
+      <svg class="thanks__icon" viewBox="0 0 72 72" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <circle cx="36" cy="36" r="34"></circle>
+        <path d="m22 37 10 10 19-21" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <h2 class="thanks__title">送信が完了しました</h2>
+      <p>お問い合わせいただき、ありがとうございます。<br />内容を確認のうえ、担当者よりご連絡いたします。</p>
+      <a class="btn" href="/">トップページへ <Arrow /></a>
+    </div>
+  </div>
+</Page>
+
+<script>
+  // Formspree へ非同期送信し、ページ遷移なしで完了メッセージを表示する。
+  // JavaScript が無効な環境では、通常のフォーム送信（Formspree の完了ページへ遷移）になる。
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const thanks = document.querySelector<HTMLElement>('[data-thanks]');
+  const status = document.querySelector<HTMLElement>('[data-status]');
+  const button = document.querySelector<HTMLButtonElement>('[data-submit]');
+  const label = document.querySelector<HTMLElement>('[data-submit-label]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form || !status || !button || !label) return;
+    status.textContent = '';
+    status.classList.remove('is-error');
+    button.disabled = true;
+    label.textContent = '送信中…';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true;
+      document.querySelector<HTMLElement>('.lead-text')?.setAttribute('hidden', '');
+      if (thanks) {
+        thanks.hidden = false;
+        thanks.focus();
+        thanks.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch {
+      status.textContent = '送信に失敗しました。お手数ですが、時間をおいて再度お試しください。';
+      status.classList.add('is-error');
+      button.disabled = false;
+      label.textContent = '送信する';
+    }
+  });
+</script>

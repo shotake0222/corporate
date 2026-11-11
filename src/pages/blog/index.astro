@@ -1,0 +1,11 @@
+---
+import Page from '../../layouts/Page.astro';
+import BlogCards from '../../components/BlogCards.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import { getPosts } from '../../lib/posts';
+const posts = await getPosts('blog');
+---
+<Page en="Blog" ja="ブログ" description="合同会社in One'sのブログです。事業やサービスの背景、日々の考えを発信します。">
+  <BlogCards posts={posts} headingTag="h2" />
+  <ContactCta slot="after" />
+</Page>

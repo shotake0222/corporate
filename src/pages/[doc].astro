@@ -1,0 +1,23 @@
+---
+// 規程ページ（個人情報保護方針・サイトポリシー）。
+// src/content/pages/ に md を追加すると /ファイル名/ として公開されます（message.md は除く）。
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Page from '../layouts/Page.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const docs = (await getCollection('pages')).filter((d) => d.id !== 'message');
+  return docs.map((doc) => ({ params: { doc: doc.id }, props: { doc } }));
+};
+interface Props {
+  doc: CollectionEntry<'pages'>;
+}
+const { doc } = Astro.props;
+const { Content } = await render(doc);
+---
+<Page en={doc.data.titleEn ?? doc.data.title} ja={doc.data.title} description={doc.data.description} narrow>
+  <div class="prose">
+    <Content />
+  </div>
+  {doc.data.updated && <p class="doc-updated">{doc.data.updated}</p>}
+</Page>

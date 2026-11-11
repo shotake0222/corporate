@@ -1,0 +1,24 @@
+---
+import { siFacebook, siInstagram, siX, siThreads, siTiktok } from 'simple-icons';
+import { representative } from '../data/site';
+const icons: Record<string, string> = {
+  facebook: siFacebook.path,
+  instagram: siInstagram.path,
+  x: siX.path,
+  threads: siThreads.path,
+  tiktok: siTiktok.path,
+};
+---
+<ul class="sns">
+  {
+    representative.sns.map((s) => (
+      <li>
+        <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.label}（別タブで開きます）`} title={s.label}>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d={icons[s.id]} />
+          </svg>
+        </a>
+      </li>
+    ))
+  }
+</ul>

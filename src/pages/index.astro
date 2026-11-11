@@ -1,0 +1,189 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import Blobs from '../components/Blobs.astro';
+import Waves from '../components/Waves.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import NewsList from '../components/NewsList.astro';
+import BlogCards from '../components/BlogCards.astro';
+import MediaGrid from '../components/MediaGrid.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import CompanyTable from '../components/CompanyTable.astro';
+import ContactCta from '../components/ContactCta.astro';
+import SnsLinks from '../components/SnsLinks.astro';
+import ExternalIcon from '../components/ExternalIcon.astro';
+import Phrases from '../components/Phrases.astro';
+import { getPosts } from '../lib/posts';
+import { site, hero, mission, vision, representative } from '../data/site';
+
+const news = (await getPosts('news')).slice(0, 5);
+const blog = (await getPosts('blog')).slice(0, 3);
+
+const messageEntry = await getEntry('pages', 'message');
+if (!messageEntry) throw new Error('src/content/pages/message.md が見つかりません');
+const { Content: MessageBody } = await render(messageEntry);
+const messageQuote = messageEntry.data.title.split('／');
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: site.name,
+    alternateName: site.nameEn,
+    url: Astro.site?.href,
+    logo: new URL('/icon-512.png', Astro.site).href,
+    sameAs: representative.sns.map((s) => s.href),
+  },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: Astro.site?.href },
+];
+---
+
+<Base jsonLd={jsonLd}>
+  <!-- ===== メインビュー ===== -->
+  <section class="hero" aria-label="メインビジュアル">
+    <div class="hero__bg" aria-hidden="true">
+      <Blobs count={3} />
+      <svg class="hero__grain" width="100%" height="100%">
+        <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter>
+        <rect width="100%" height="100%" filter="url(#grain)"></rect>
+      </svg>
+      <Waves />
+    </div>
+
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="hero__eyebrow fade"><span class="en">{hero.eyebrowEn}</span>{hero.eyebrowJa}</p>
+        <h1 class="hero__catch">
+          {hero.catch.map((line, i) => <span class="line"><span style={`--i:${i}`}>{line}</span></span>)}
+        </h1>
+        <p class="hero__lead fade" style="--i:5">{hero.lead}</p>
+      </div>
+
+      <div class="hero__logo">
+        <svg class="hero__orbit" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+          <g class="spin">
+            <circle cx="200" cy="200" r="194" stroke="rgba(255,255,255,0.34)" stroke-width="0.8" stroke-dasharray="1000 219"></circle>
+            <circle cx="200" cy="6" r="5" fill="#fff"></circle>
+          </g>
+          <g class="spin spin--rev">
+            <circle cx="200" cy="200" r="168" stroke="rgba(255,255,255,0.2)" stroke-width="0.6" stroke-dasharray="2 9"></circle>
+            <circle cx="368" cy="200" r="3" fill="rgba(220,237,249,0.9)"></circle>
+          </g>
+        </svg>
+        <img src="/images/logo/logo-stacked-white.webp" alt={site.name} width="1181" height="1149" fetchpriority="high" />
+      </div>
+
+      <div class="hero__mv">
+        <article class="mv-card fade" style="--i:7">
+          <p class="mv-card__label">MISSION</p>
+          <h2 class="mv-card__heading"><Phrases text={mission.heading} /></h2>
+          <p class="mv-card__body">{mission.body}</p>
+        </article>
+        <article class="mv-card fade" style="--i:8">
+          <p class="mv-card__label">VISION</p>
+          <h2 class="mv-card__heading"><Phrases text={vision.heading} /></h2>
+          <p class="mv-card__body">{vision.body}</p>
+        </article>
+      </div>
+    </div>
+
+    <a class="hero__scroll fade" style="--i:10" href="#news">SCROLL</a>
+  </section>
+
+  <!-- ===== NEWS ===== -->
+  <section class="section" id="news">
+    <div class="container">
+      <div class="sec-head--row">
+        <SectionHeading en="News" ja="ニュース" />
+        <a class="more reveal" href="/news/" style="margin-bottom: clamp(32px, 5vw, 56px)">
+          VIEW ALL <span class="more__circle"><Arrow /></span>
+        </a>
+      </div>
+      <NewsList posts={news} />
+    </div>
+  </section>
+
+  <!-- ===== MESSAGE ===== -->
+  <section class="section section--tint message" id="message">
+    <div class="message__wash" aria-hidden="true"></div>
+    <div class="container message__grid">
+      <div class="message__side">
+        <SectionHeading en="Message" ja="代表メッセージ" />
+        <p class="message__quote reveal" style="--i:2">
+          {messageQuote.map((line, i) => <>{i > 0 && <br />}{line}</>)}
+        </p>
+        <img class="message__mark reveal" style="--i:3" src="/images/logo/logo-mark.webp" alt="" width="972" height="740" loading="lazy" />
+      </div>
+      <div>
+        <div class="message__body reveal">
+          <MessageBody />
+        </div>
+        <p class="message__sign reveal">
+          <span class="message__role">{representative.role}</span>
+          <span class="message__name">{representative.name}</span>
+        </p>
+        <div class="profile reveal">
+          <p class="profile__label">PROFILE / LINKS</p>
+          <ul class="profile__links">
+            {
+              representative.portfolios.map((p) => (
+                <li>
+                  <a class="profile__link" href={p.href} target="_blank" rel="noopener noreferrer">
+                    {p.label}
+                    <ExternalIcon />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <SnsLinks />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MEDIA ===== -->
+  <section class="section" id="media">
+    <div class="container">
+      <SectionHeading en="Media" ja="メディア掲載" />
+      <MediaGrid />
+    </div>
+  </section>
+
+  <!-- ===== BLOG ===== -->
+  <section class="section section--tint" id="blog">
+    <div class="container">
+      <div class="sec-head--row">
+        <SectionHeading en="Blog" ja="ブログ" />
+        <a class="more reveal" href="/blog/" style="margin-bottom: clamp(32px, 5vw, 56px)">
+          VIEW ALL <span class="more__circle"><Arrow /></span>
+        </a>
+      </div>
+      <BlogCards posts={blog} />
+    </div>
+  </section>
+
+  <!-- ===== SERVICE ===== -->
+  <section class="section" id="service">
+    <div class="container">
+      <SectionHeading en="Service" ja="サービス" />
+      <ServiceGrid />
+    </div>
+  </section>
+
+  <!-- ===== COMPANY ===== -->
+  <section class="section section--tint" id="company">
+    <div class="container split">
+      <div>
+        <SectionHeading en="Company" ja="会社概要" />
+        <a class="more reveal" href="/company/">
+          VIEW MORE <span class="more__circle"><Arrow /></span>
+        </a>
+      </div>
+      <CompanyTable only={['会社名', '英文表記', '社名の由来', '代表者']} />
+    </div>
+  </section>
+
+  <ContactCta />
+</Base>

@@ -1,0 +1,50 @@
+---
+// 下層ページ共通レイアウト（青い見出し帯 + パンくず + 本文）
+import Base from './Base.astro';
+import Blobs from '../components/Blobs.astro';
+import Waves from '../components/Waves.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  en: string;
+  ja: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  crumbs?: Crumb[];
+  narrow?: boolean;
+  headingTag?: 'h1' | 'p';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+const { en, ja, title = ja, crumbs = [{ label: ja }], narrow = false, headingTag: Heading = 'h1', ...rest } = Astro.props;
+---
+
+<Base title={title} {...rest}>
+  <div class="page-hero">
+    <div class="hero__bg" aria-hidden="true">
+      <Blobs />
+      <Waves />
+    </div>
+    <div class="container">
+      <p class="page-hero__en" aria-hidden="true">{en}</p>
+      <Heading class="page-hero__ja">{ja}</Heading>
+      <nav aria-label="パンくずリスト">
+        <ol class="breadcrumb">
+          <li><a href="/">TOP</a></li>
+          {crumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="section">
+    <div class:list={['container', { 'container--narrow': narrow }]}>
+      <slot />
+    </div>
+  </div>
+  <slot name="after" />
+</Base>

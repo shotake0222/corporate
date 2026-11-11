@@ -1,0 +1,40 @@
+---
+import { nav, site } from '../data/site';
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => !href.includes('#') && path.startsWith(href);
+---
+<header class="header" data-header>
+  <a class="header__logo" href="/" aria-label={`${site.name} トップページ`}>
+    <img class="logo-white" src="/images/logo/logo-horizontal-white.webp" alt="" width="1014" height="294" />
+    <img class="logo-color" src="/images/logo/logo-horizontal.webp" alt="" width="1014" height="294" />
+  </a>
+  <nav class="header__nav" aria-label="グローバルナビゲーション">
+    {
+      nav.map((item) => (
+        <a class="header__link" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+    <a class="btn btn--sm header__contact" href="/contact/">CONTACT</a>
+  </nav>
+  <button class="header__toggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="menu" id="menu" data-menu>
+  <ul class="menu__list">
+    {
+      nav.map((item, i) => (
+        <li style={`--i:${i}`}>
+          <a href={item.href}>
+            <span class="menu__en">{item.label}</span>
+            <span class="menu__ja">{item.ja}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <a class="btn btn--light btn--block menu__cta" href="/contact/">お問い合わせ</a>
+</div>

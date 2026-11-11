@@ -1,0 +1,36 @@
+---
+import { nav, site, hero } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div>
+        <a href="/" aria-label={`${site.name} トップページ`}>
+          <img class="footer__logo" src="/images/logo/logo-horizontal-white.webp" alt={site.name} width="1014" height="294" loading="lazy" />
+        </a>
+        <p class="footer__tagline">{hero.catch.join('')}</p>
+      </div>
+      <nav class="footer__nav" aria-label="フッターナビゲーション">
+        {
+          [...nav, { label: 'CONTACT', ja: 'お問い合わせ', href: '/contact/' }].map((item) => (
+            <a href={item.href}>
+              <span class="en">{item.label}</span>
+              <span class="ja">{item.ja}</span>
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+    <div class="footer__bottom">
+      <ul class="footer__legal">
+        <li><a href="/privacy/">個人情報保護方針</a></li>
+        <li><a href="/policy/">サイトポリシー</a></li>
+      </ul>
+      <p class="footer__copy">&copy; {year} {site.nameEn} All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+<a class="to-top" href="#top" aria-label="ページの先頭へ戻る" data-to-top>
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8 15V1M2.5 6.5 8 1l5.5 5.5" /></svg>
+</a>

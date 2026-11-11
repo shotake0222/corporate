@@ -1,0 +1,70 @@
+---
+// ニュース・ブログ共通の記事詳細
+import { render } from 'astro:content';
+import Page from '../layouts/Page.astro';
+import Arrow from './Arrow.astro';
+import ContactCta from './ContactCta.astro';
+import { formatDate, isoDate, type Post } from '../lib/posts';
+import { site } from '../data/site';
+
+interface Props {
+  post: Post;
+  prev?: Post; // ひとつ新しい記事
+  next?: Post; // ひとつ古い記事
+}
+const { post, prev, next } = Astro.props;
+const { Content } = await render(post.entry);
+const section = post.kind === 'news' ? { en: 'News', ja: 'ニュース' } : { en: 'Blog', ja: 'ブログ' };
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': post.kind === 'news' ? 'NewsArticle' : 'BlogPosting',
+  headline: post.title,
+  description: post.description,
+  datePublished: isoDate(post.date),
+  image: new URL(post.image, Astro.site).href,
+  author: { '@type': 'Organization', name: site.name },
+  publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', Astro.site).href } },
+  mainEntityOfPage: new URL(post.url, Astro.site).href,
+};
+---
+<Page
+  en={section.en}
+  ja={section.ja}
+  title={post.title}
+  description={post.description}
+  image={post.image}
+  type="article"
+  noindex={post.draft}
+  headingTag="p"
+  narrow
+  crumbs={[{ label: section.ja, href: `/${post.kind}/` }, { label: post.title }]}
+  jsonLd={jsonLd}
+>
+  <article>
+    <header class="article__head">
+      <div class="article__meta">
+        <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+        <span class="chip">{post.category}</span>
+        {post.draft && <span class="chip chip--draft">下書き（本番には公開されません）</span>}
+      </div>
+      <h1 class="article__title">{post.title}</h1>
+    </header>
+    {
+      post.hasCustomThumbnail && (
+        <figure class="article__cover">
+          <img src={post.image} alt="" />
+        </figure>
+      )
+    }
+    <div class="prose">
+      <Content />
+    </div>
+    <footer class="article__foot">
+      {prev ? <a class="pager pager--prev" href={prev.url}><span>← NEWER</span><b>{prev.title}</b></a> : <span />}
+      <a class="btn btn--sm" href={`/${post.kind}/`}>一覧へ戻る <Arrow /></a>
+      {next ? <a class="pager pager--next" href={next.url}><span>OLDER →</span><b>{next.title}</b></a> : <span />}
+    </footer>
+  </article>
+  <ContactCta slot="after" />
+</Page>

@@ -1,0 +1,23 @@
+---
+import { media, mediaNote } from '../data/media';
+import ExternalIcon from './ExternalIcon.astro';
+---
+<p class="media-note reveal">{mediaNote}</p>
+<ul class="logo-grid">
+  {
+    media.map((item, i) => (
+      <li class="reveal" style={`--i:${i % 6}`}>
+        {item.url ? (
+          <a class="logo-tile logo-tile--media" href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`${item.name}の掲載記事（別タブで開きます）`}>
+            <img src={`/images/media/${item.logo}`} alt={item.name} loading="lazy" decoding="async" />
+            <ExternalIcon class="logo-tile__ext" />
+          </a>
+        ) : (
+          <div class="logo-tile logo-tile--media">
+            <img src={`/images/media/${item.logo}`} alt={item.name} loading="lazy" decoding="async" />
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>

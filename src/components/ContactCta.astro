@@ -1,0 +1,15 @@
+---
+import Arrow from './Arrow.astro';
+import Blobs from './Blobs.astro';
+---
+<section class="cta" aria-labelledby="cta-title">
+  <div class="hero__bg" aria-hidden="true"><Blobs /></div>
+  <div class="container">
+    <p class="cta__en reveal" aria-hidden="true">Contact</p>
+    <h2 class="cta__ja reveal" id="cta-title" style="--i:1">お問い合わせ</h2>
+    <p class="cta__text reveal" style="--i:2">
+      事業戦略・新規事業のご相談、各サービスに関するご質問、取材のご依頼など、まずはお気軽にお問い合わせください。
+    </p>
+    <a class="btn btn--light reveal" style="--i:3" href="/contact/">お問い合わせフォームへ <Arrow /></a>
+  </div>
+</section>

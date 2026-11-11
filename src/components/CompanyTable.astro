@@ -1,0 +1,21 @@
+---
+import { company } from '../data/site';
+interface Props {
+  /** 指定したラベルの行だけを表示（トップページのダイジェスト用） */
+  only?: string[];
+}
+const { only } = Astro.props;
+const rows = only ? company.filter((r) => only.includes(r.label)) : company;
+---
+<dl class="spec">
+  {
+    rows.map((row, i) => (
+      <div class="spec__row reveal" style={`--i:${Math.min(i, 6)}`}>
+        <dt>{row.label}</dt>
+        <dd>
+          {!row.value ? <span class="spec__pending">準備中</span> : row.href ? <a href={row.href}>{row.value}</a> : row.value}
+        </dd>
+      </div>
+    ))
+  }
+</dl>

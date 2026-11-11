@@ -1,0 +1,34 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDate, isoDate } from '../lib/posts';
+interface Props {
+  posts: Post[];
+  headingTag?: 'h2' | 'h3';
+}
+const { posts, headingTag: Heading = 'h3' } = Astro.props;
+---
+{
+  posts.length === 0 ? (
+    <p class="empty">記事を準備中です。</p>
+  ) : (
+    <ul class:list={['card-grid', { 'card-grid--single': posts.length === 1 }]}>
+      {posts.map((post, i) => (
+        <li class="card reveal" style={`--i:${i % 3}`}>
+          <a href={post.url}>
+            <div class="card__thumb">
+              <img src={post.image} alt="" width="1200" height="630" loading="lazy" decoding="async" />
+            </div>
+            <div class="card__body">
+              <div class="card__meta">
+                <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+                <span class:list={['chip', { 'chip--draft': post.draft }]}>{post.draft ? '下書き' : post.category}</span>
+              </div>
+              <Heading class="card__title">{post.title}</Heading>
+              <p class="card__desc">{post.description}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

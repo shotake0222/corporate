@@ -1,0 +1,27 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDate, isoDate } from '../lib/posts';
+import Arrow from './Arrow.astro';
+interface Props {
+  posts: Post[];
+}
+const { posts } = Astro.props;
+---
+{
+  posts.length === 0 ? (
+    <p class="empty">現在、お知らせはありません。</p>
+  ) : (
+    <ul class="news-list">
+      {posts.map((post, i) => (
+        <li class="news-item reveal" style={`--i:${Math.min(i, 6)}`}>
+          <a href={post.url}>
+            <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+            <span class:list={['chip', { 'chip--draft': post.draft }]}>{post.draft ? '下書き' : post.category}</span>
+            <span class="news-item__title">{post.title}</span>
+            <Arrow />
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

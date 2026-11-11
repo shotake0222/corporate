@@ -1,0 +1,9 @@
+---
+import Page from '../layouts/Page.astro';
+import CompanyTable from '../components/CompanyTable.astro';
+import ContactCta from '../components/ContactCta.astro';
+---
+<Page en="Company" ja="会社概要" description="合同会社in One'sの会社概要です。" narrow>
+  <CompanyTable />
+  <ContactCta slot="after" />
+</Page>
