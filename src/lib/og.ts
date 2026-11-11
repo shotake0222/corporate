@@ -125,7 +125,7 @@ export async function renderOgImage({ title, label = '', meta = '' }: OgOptions)
       // 下段: 日付など + ロゴ
       h('div', { display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }, [
         h('div', { fontFamily: 'Gothic', fontSize: 26, letterSpacing: 3, color: '#dcedf9' }, meta),
-        h('img', { width: 300, height: 87 }, undefined, { src: logo, width: 300, height: 87 }),
+        h('img', { width: 300, height: 83 }, undefined, { src: logo, width: 300, height: 83 }),
       ]),
         ],
       ),

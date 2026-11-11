@@ -348,7 +348,7 @@ button {
   position: relative;
   display: block;
   width: clamp(150px, 15vw, 186px);
-  aspect-ratio: 1014 / 294;
+  aspect-ratio: 1004 / 278;
   flex: none;
 }
 .header__logo img {
